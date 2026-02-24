@@ -1,0 +1,28 @@
+name: Deploy React Map to GitHub Pages
+
+on:
+  push:
+    branches: ['main'] # 当你 push 代码到 main 分支时触发
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 检出你的代码
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 准备环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25.6'
+
+      - name: Install & Build 安装并打包
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy 上传到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # Vite 默认的打包产物文件夹
